@@ -1,0 +1,2 @@
+- Spring AI v2.0 supports Boot 4.0 and 4.1
+- Spring Boot 4.0 supports Gradle 9.0
