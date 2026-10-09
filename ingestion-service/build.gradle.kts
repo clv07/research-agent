@@ -17,11 +17,20 @@ repositories {
 dependencies {
     implementation(project(":common"))
 
-    implementation(libs.spring.boot.starter.webmvc)
-    implementation(libs.spring.boot.starter.validation)
-    implementation(libs.spring.boot.starter.actuator)
+    implementation(libs.spring.boot.webmvc)
+    implementation(libs.spring.boot.validation)
+    implementation(libs.spring.boot.actuator)
+    implementation(libs.spring.boot.data.jpa) // JPA, Hibernate and Spring Data
+    implementation(libs.spring.boot.flyway) // Flyway
 
-    testImplementation(libs.spring.boot.starter.webmvc.test)
+    runtimeOnly(libs.postgresql.postgresql)
+    runtimeOnly(libs.flyway.postgresql)
+
+    testImplementation(libs.spring.boot.webmvc.test)
+    testImplementation(libs.spring.boot.testcontainers)
+    testImplementation(libs.testcontainers.postgresql)
+    testImplementation(libs.testcontainers.junit.jupiter)
+
     testRuntimeOnly(libs.junit.platform.launcher)
 }
 
