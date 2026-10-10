@@ -1,11 +1,8 @@
 package scholar.ingestion.service;
 
-import java.time.Instant;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -15,11 +12,17 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import scholar.ingestion.dto.PaperResponse;
-import scholar.ingestion.dto.PaperStatus;
+import scholar.ingestion.entity.Paper;
+import scholar.ingestion.repository.PaperRepository;
 
 @Service
 public class PaperService {
-    private final Map<UUID, PaperResponse> papers = new ConcurrentHashMap<>();
+    private final PaperRepository papers;
+
+    public PaperService(PaperRepository papers) {
+        this.papers = papers;
+    }
+
     private static final Set<String> ALLOWED_TYPES = Set.of("application/pdf", "text/plain");
 
     public PaperResponse create(MultipartFile file) {
@@ -37,21 +40,20 @@ public class PaperService {
         String filename = file.getOriginalFilename();
         filename = StringUtils.hasText(filename) ? filename : "untitled";
 
-        // 3. Build a response object with PENDING, put it in hashmap and return it
-        var paper = new PaperResponse(UUID.randomUUID(), null, filename, Instant.now(), PaperStatus.PENDING);
-        papers.put(paper.id(), paper);
-        return paper;
+        // 3. Build a response object with PENDING and return it
+        var paper = new Paper(null, filename);
+        var saved = papers.save(paper);
+        return PaperResponse.from(saved);
     }
     
     public List<PaperResponse> findAll() {
-        return List.copyOf(papers.values());
+        return papers.findAll().stream().map(PaperResponse::from).toList();
     }
 
     public PaperResponse findById(UUID id) {
-        var paper = papers.get(id);
-        if (paper == null)
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Paper " + id + " not found");
-        return paper;
+        return papers.findById(id)
+                .map(PaperResponse::from)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Paper " + id + " not found"));
     }
 
     public String getOriginalFilename(UUID id) {

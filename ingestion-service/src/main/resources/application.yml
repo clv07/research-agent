@@ -8,7 +8,15 @@ spring:
     multipart:
       max-file-size: 20MB
       max-request-size: 20MB
-      
+  datasource:
+    url: jdbc:postgresql://localhost:5432/paper_db
+    username: svt
+    password: paper-service
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    
 server:
   # 8080 is reserved for the gateway
   port: 8081
