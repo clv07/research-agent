@@ -21,7 +21,7 @@ function App() {
   return (
     <div className="app">
       <Sidebar papers={papers} onUploaded={(paper) => setPapers((prev) => [...prev, paper])} onError={setError}></Sidebar>
-      <ChatPanel />
+      <ChatPanel onError={setError} />
       <Toast message={ error } onClose={setError} />
     </div>
 

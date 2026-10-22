@@ -1,17 +1,26 @@
+import { useRef, useEffect } from "react";
 import { type ChatMessage } from "../api.ts";
 
-const sampleMessage: ChatMessage[] = [
-    { id: "1", role: "user", content: "Write me code for this project." },
-    { id: "2", role: "assistant", content: "Sure! Gimme a secs...", citations: [{ paperId: "1", chunkId: "1" }] }
-];
+type MessageListProps = {
+    messages: ChatMessage[];
+    sending: boolean;
+}
 
-export function MessageList() {
+export function MessageList({ messages, sending }: MessageListProps) {
+    const bottomRef = useRef<HTMLDivElement>(null);
+
+    // for auto scrolling the conversation panel to the bottom
+    useEffect(() => { 
+        bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, [messages, sending]);
 
     return (
         <div className="message-list">
-                {sampleMessage.map((m) => (
+                {messages.map((m) => (
                     <div key={m.id} className={`message message-${m.role}`}>{m.content}</div>
                 ))}
+            {sending && <div className="message message-assistant">Thinking…</div>}
+            <div ref={bottomRef} /> 
         </div>
     );
 }
