@@ -83,3 +83,8 @@
   font-size: 18px;
   color: inherit;     /* same color as the toast text */
 }
+
+.upload-button:focus {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+}
