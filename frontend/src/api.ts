@@ -8,6 +8,23 @@ export type Paper = {
     status: 'PENDING' | 'EMBEDDED' | 'FAILED';
 }
 
+export type ChatReply = {
+    reply: string;
+    citations: {
+        paperId: string,
+        chunkId: string
+    }[];
+}
+export type ChatMessage = {
+    id: string, 
+    role: "user" | "assistant",
+    content: string,
+    citations?: {
+        paperId: string,
+        chunkId: string
+    }[]; 
+}
+
 export async function uploadPapers(file: File): Promise<Paper> { 
     const body = new FormData();
     body.append('file', file);
@@ -23,3 +40,13 @@ export async function listPapers(): Promise<Paper[]> {
         throw new Error(`Get list of papers failed: ${res.status}`);
     return res.json();
 }
+
+// mock for now
+export async function sendMessage(_conversationId: string, message: string): Promise<ChatReply>{ 
+    await new Promise((r) => setTimeout(r, 800)); // pretend to think
+    return {
+        reply: `(mock) You said: ${message}`,
+         citations: []
+    };
+}
+

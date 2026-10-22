@@ -1,0 +1,77 @@
+.app {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    height: 100vh;
+}
+
+.sidebar {
+    border-right: auto;
+    padding: auto;
+    overflow-y: auto;
+}
+
+.chat-panel {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.message-list {
+    flex: 1; /* take all leftover height */
+    overflow-y: auto;
+}
+
+.message-input {
+    display: flex;
+    gap: 8px;
+    padding: border-top;
+}
+
+.message-input textarea {
+    flex: 1;
+    resize: none;
+}
+
+.message {
+    max-width: 70%;
+    padding: 3%;
+    border-radius: 1pt;
+    margin-bottom: auto;
+}
+
+.message-user {
+    margin-left: auto;
+    background-color:rgb(42, 165, 44);
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translate(-50%, -16px); }
+  to   { opacity: 1; transform: translate(-50%, 0); }
+}
+
+.toast {
+  position: fixed;     /* positioned against the browser window, not the layout */
+  top: 16px;                      /* near the top of the window */
+  left: 50%;                      /* left EDGE moves to the middle of the window… */
+  transform: translateX(-50%);    /* …then shift left by half the toast's OWN width */
+  z-index: 1000;
+  background-color: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fca5a5;
+  padding: 12px 16px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  display: flex; 
+  align-items: center; 
+  gap: 12px;
+  max-width: 400px;
+  animation: toast-in 300ms ease-out;
+}
+
+.close-button {
+  background: none;   /* no grey button box */
+  border: none;
+  cursor: pointer;    /* hand cursor on hover, so it looks clickable */
+  font-size: 18px;
+  color: inherit;     /* same color as the toast text */
+}
