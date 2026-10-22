@@ -5,8 +5,8 @@
 }
 
 .sidebar {
-    border-right: auto;
-    padding: auto;
+    border-right: 1px solid #e5e7eb;
+    padding: 16px;
     overflow-y: auto;
 }
 
@@ -19,29 +19,37 @@
 .message-list {
     flex: 1; /* take all leftover height */
     overflow-y: auto;
+    padding: 16px;
 }
 
 .message-input {
     display: flex;
     gap: 8px;
-    padding: border-top;
+    padding: 8px 15px;
 }
 
 .message-input textarea {
     flex: 1;
     resize: none;
+    border-radius: 8px;
+    padding: 4px 8px;
 }
 
 .message {
     max-width: 70%;
-    padding: 3%;
-    border-radius: 1pt;
-    margin-bottom: auto;
+    padding: 8px 12px;
+    border-radius: 12px;
+    margin-bottom: 8px;
+    margin-top: 8px;
 }
 
 .message-user {
     margin-left: auto;
-    background-color:rgb(42, 165, 44);
+    background-color: #c4d3f1;
+}
+
+.message-assistant {
+   background-color:#f3f4f6; 
 }
 
 @keyframes toast-in {
