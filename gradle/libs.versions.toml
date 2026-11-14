@@ -5,9 +5,10 @@
 [versions]
 spring-boot = "4.1.1"
 spring-dependency-management = "1.1.7"
+spring-ai = "2.0.2"
 
 [libraries]
-# No versions here: the Spring Boot BOM (applied via the dependency-management plugin) picks them.
+# Without version.ref: Spring Boot BOM picks them.
 spring-boot-webmvc = { module = "org.springframework.boot:spring-boot-starter-webmvc" }
 spring-boot-validation = { module = "org.springframework.boot:spring-boot-starter-validation" }
 spring-boot-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator" }
@@ -15,6 +16,9 @@ spring-boot-webmvc-test = { module = "org.springframework.boot:spring-boot-start
 spring-boot-data-jpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa" }
 spring-boot-flyway = { module = "org.springframework.boot:spring-boot-starter-flyway" }
 spring-boot-testcontainers = { module = "org.springframework.boot:spring-boot-testcontainers" }
+
+spring-ai-bom = { module = "org.springframework.ai:spring-ai-bom", version.ref = "spring-ai"}
+spring-ai-pdf-reader = { module = "org.springframework.ai:spring-ai-pdf-document-reader"}
 
 postgresql-postgresql = { module = "org.postgresql:postgresql" }
 flyway-postgresql = { module = "org.flywaydb:flyway-database-postgresql" }

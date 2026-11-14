@@ -22,6 +22,9 @@ dependencies {
     implementation(libs.spring.boot.actuator)
     implementation(libs.spring.boot.data.jpa) // JPA, Hibernate and Spring Data
     implementation(libs.spring.boot.flyway) // Flyway
+    
+    implementation(platform(libs.spring.ai.bom)) // a BOM for Spring AI
+    implementation(libs.spring.ai.pdf.reader)
 
     runtimeOnly(libs.postgresql.postgresql)
     runtimeOnly(libs.flyway.postgresql)

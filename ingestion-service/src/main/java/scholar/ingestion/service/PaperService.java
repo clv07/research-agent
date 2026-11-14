@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.ai.document.Document;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
@@ -18,13 +21,16 @@ import scholar.ingestion.repository.PaperRepository;
 @Service
 public class PaperService {
     private final PaperRepository papers;
+    private final DocumentChunker chunker;
 
-    public PaperService(PaperRepository papers) {
+    public PaperService(PaperRepository papers, DocumentChunker chunker) {
         this.papers = papers;
+        this.chunker = chunker;
     }
 
     private static final Set<String> ALLOWED_TYPES = Set.of("application/pdf", "text/plain");
-
+    private static final Logger log = LoggerFactory.getLogger(PaperService.class);
+    
     public PaperResponse create(MultipartFile file) {
         // 1. File validation
         // 1a. if empty, return 400
@@ -43,6 +49,13 @@ public class PaperService {
         // 3. Build a response object with PENDING and return it
         var paper = new Paper(null, filename);
         var saved = papers.save(paper);
+
+        // 4. Chunk file
+        List<Document> docs = chunker.chunk(file, saved.getId());
+        
+        // 5. log chunk count
+        log.info("{} -> {} chunks", filename, docs.size());
+
         return PaperResponse.from(saved);
     }
     

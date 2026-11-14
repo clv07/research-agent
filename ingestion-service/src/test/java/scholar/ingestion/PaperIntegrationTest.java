@@ -35,25 +35,25 @@ public class PaperIntegrationTest {
     @Test 
     void uploadedPaperIsSavedAndListed() throws Exception { // getContentAsString() throws a checked exception
         var postResult = mvc.post().uri("/api/papers").multipart()
-            .file(new MockMultipartFile("file", "a.pdf", "application/pdf", "x".getBytes())).exchange();
+            .file(new MockMultipartFile("file", "a.txt", "text/plain", "some paper text".getBytes())).exchange();
         assertThat(postResult).hasStatus(HttpStatus.CREATED);
         assertThat(postResult).bodyJson().extractingPath("$.status").isEqualTo("PENDING");
         assertThat(paperRepository.count()).isEqualTo(1);
         
         var getAllResult = mvc.get().uri("/api/papers").exchange();
         assertThat(getAllResult).bodyJson().extractingPath("$.length()").isEqualTo(1);
-        assertThat(getAllResult).bodyJson().extractingPath("$[0].filename").isEqualTo("a.pdf");
+        assertThat(getAllResult).bodyJson().extractingPath("$[0].filename").isEqualTo("a.txt");
 
         String body = postResult.getResponse().getContentAsString();
         String id = JsonPath.read(body, "$.id");
         var getResult = mvc.get().uri("/api/papers/{id}", id).exchange();
-        assertThat(getResult).bodyJson().extractingPath("$.filename").isEqualTo("a.pdf");
+        assertThat(getResult).bodyJson().extractingPath("$.filename").isEqualTo("a.txt");
     }
     
     @Test
     void savedPaperHasGeneratedFields() {
         var postResult = mvc.post().uri("/api/papers").multipart()
-            .file(new MockMultipartFile("file", "a.pdf", "application/pdf", "x".getBytes())).exchange();
+            .file(new MockMultipartFile("file", "a.txt", "text/plain", "some paper text".getBytes())).exchange();
         assertThat(postResult).hasStatus(HttpStatus.CREATED);
       
         String location = postResult.getResponse().getHeader("Location");
@@ -66,13 +66,13 @@ public class PaperIntegrationTest {
     @Test
     void getByIdReturnsSavedPaper() {
         var postResult = mvc.post().uri("/api/papers").multipart()
-            .file(new MockMultipartFile("file", "a.pdf", "application/pdf", "x".getBytes())).exchange();
+            .file(new MockMultipartFile("file", "a.txt", "text/plain", "some paper text".getBytes())).exchange();
         assertThat(postResult).hasStatus(HttpStatus.CREATED);
 
         String location = postResult.getResponse().getHeader("Location");
         var result = mvc.get().uri(location).exchange();
         assertThat(result).hasStatusOk();
-        assertThat(result).bodyJson().extractingPath("$.filename").isEqualTo("a.pdf");
+        assertThat(result).bodyJson().extractingPath("$.filename").isEqualTo("a.txt");
     }
     
     @Test 
