@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.document.Document;
+import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
@@ -22,10 +23,12 @@ import scholar.ingestion.repository.PaperRepository;
 public class PaperService {
     private final PaperRepository papers;
     private final DocumentChunker chunker;
+    private final VectorStore vectorStore;
 
-    public PaperService(PaperRepository papers, DocumentChunker chunker) {
+    public PaperService(PaperRepository papers, DocumentChunker chunker, VectorStore vectorStore) {
         this.papers = papers;
         this.chunker = chunker;
+        this.vectorStore = vectorStore;
     }
 
     private static final Set<String> ALLOWED_TYPES = Set.of("application/pdf", "text/plain");
@@ -55,6 +58,16 @@ public class PaperService {
         
         // 5. log chunk count
         log.info("{} -> {} chunks", filename, docs.size());
+
+        // 6. embedding and set status
+        try {
+            vectorStore.add(docs);
+            saved.setEmbedded();
+        } catch (RuntimeException e) {
+            log.warn("embedding failed for {}", saved.getId(), e);
+            saved.setFailed();
+        }
+        saved = papers.save(saved); // persist new status
 
         return PaperResponse.from(saved);
     }

@@ -25,6 +25,8 @@ dependencies {
     
     implementation(platform(libs.spring.ai.bom)) // a BOM for Spring AI
     implementation(libs.spring.ai.pdf.reader)
+    implementation(libs.spring.ai.model.transformers)
+    implementation(libs.spring.ai.vector.store)
 
     runtimeOnly(libs.postgresql.postgresql)
     runtimeOnly(libs.flyway.postgresql)

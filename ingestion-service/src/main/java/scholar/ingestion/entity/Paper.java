@@ -66,4 +66,12 @@ public class Paper {
         return status;
     }
 
+    public void setEmbedded() {
+        this.status = PaperStatus.EMBEDDED;
+    }
+
+    public void setFailed() {
+        this.status = PaperStatus.FAILED;
+    }
+
 }

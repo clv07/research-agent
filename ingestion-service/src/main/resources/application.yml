@@ -16,7 +16,14 @@ spring:
     hibernate:
       ddl-auto: validate
     open-in-view: false
-    
+  ai:
+    vectorstore:
+      pgvector:
+        dimensions: 384
+        distance-type: COSINE_DISTANCE
+        index-type: HNSW
+        initialize-schema: false  #Flyway owns the schema
+        
 server:
   # 8080 is reserved for the gateway
   port: 8081
